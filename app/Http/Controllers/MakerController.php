@@ -43,9 +43,20 @@ class MakerController extends Controller
 	}
 
 	//| PUT|PATCH | api/makers/{maker}                    | makers.update           | App\Http\Controllers\MakerController@update         | api        |
-	public function update($makerId)
+	public function update(CreateMakerRequest $request, $makerId)
 	{
-		# code...
+		$maker = Maker::find($makerId);
+
+		if(!$maker)
+		{
+			return response()->json(['message' => 'This maker does not exist!', 'code' => 404], 404);			
+		}
+
+		$values = $request->only(['name', 'phone']);
+		$maker->fill($values);
+		$maker->save();
+
+		return response()->json(['message' => 'The maker has been updated!', 'code' => 200], 200);
 	}
 
 	//| DELETE    | api/makers/{maker}                    | makers.destroy          | App\Http\Controllers\MakerController@destroy        | api        |
