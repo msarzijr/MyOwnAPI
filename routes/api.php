@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::resource('makers', 'MakerController', ['except' => ['create','edit']]);
+
+Route::resource('vehicles', 'VehicleController', ['only' => ['index']]);
+
+Route::resource('makers.vehicles', 'MakerVehicleController', ['except' => ['edit','create']]);
+
+
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
