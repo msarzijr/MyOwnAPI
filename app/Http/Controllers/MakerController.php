@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Maker;
+use App\Http\Requests\CreateMakerRequest;
 
 class MakerController extends Controller
 {
@@ -16,15 +17,22 @@ class MakerController extends Controller
 	}
 
 	//| POST      | api/makers                            | makers.store            | App\Http\Controllers\MakerController@store          | api        |
-	public function store()
+	public function store(CreateMakerRequest $request)
 	{
-		# code...
+		$values = $request->only(['name', 'phone']);
+
+		//$makers = Maker::create($values);
+		$maker = new Maker();
+        $maker->fill($values);
+        $maker->save();
+
+		return response()->json(['message' => 'Maker corretly added!', 'code' => 201], 201);
 	}
 
 	//| GET|HEAD  | api/makers/{maker}                    | makers.show             | App\Http\Controllers\MakerController@show           | api        |
-	public function show($id)
+	public function show($makerId)
 	{
-		$maker = Maker::find($id);
+		$maker = Maker::find($makerId);
 
 		if(!$maker)
 		{
@@ -35,13 +43,13 @@ class MakerController extends Controller
 	}
 
 	//| PUT|PATCH | api/makers/{maker}                    | makers.update           | App\Http\Controllers\MakerController@update         | api        |
-	public function update($id)
+	public function update($makerId)
 	{
 		# code...
 	}
 
 	//| DELETE    | api/makers/{maker}                    | makers.destroy          | App\Http\Controllers\MakerController@destroy        | api        |
-	public function destroy($id)
+	public function destroy($makerId)
 	{
 		# code...
 	}

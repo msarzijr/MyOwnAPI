@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Maker;
 use App\Vehicle;
+use App\Http\Requests\CreateMakerVehiclesRequest;
 
 class MakerVehicleController extends Controller
 {
@@ -23,9 +24,24 @@ class MakerVehicleController extends Controller
 	}
 	
 	//| POST      | api/makers/{maker}/vehicles           | makers.vehicles.store   | App\Http\Controllers\MakerVehicleController@store   | api        |
-	public function store($makerId)
+	public function store(CreateMakerVehiclesRequest $request, $makerId)
 	{
-		# code...
+		$maker = Maker::find($makerId);
+
+		if(!$maker)
+		{
+			return response()->json(['message' => 'This maker does not exist!', 'code' => 404], 404);			
+		}
+
+		$values = $request->all();
+		$values['maker_id'] = $makerId;
+
+		//$maker->vehicles()->create($values);
+		$vehicle = new Vehicle();
+		$vehicle->fill($values);
+        $vehicle->save();
+
+		return response()->json(['message' => 'Vehicle corretly added!', 'code' => 201], 201);
 	}
 
 	//| GET|HEAD  | api/makers/{maker}/vehicles/{vehicle} | makers.vehicles.show    | App\Http\Controllers\MakerVehicleController@show    | api        |

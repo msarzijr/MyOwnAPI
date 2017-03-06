@@ -13,11 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('makers', 'MakerController', ['except' => ['create','edit']]);
+Route::resource('makers', 'MakerController', ['except' => ['create','edit'], 'parameters' => ['makers' => 'maker_id']]);
 
-Route::resource('vehicles', 'VehicleController', ['only' => ['index']]);
+Route::resource('vehicles', 'VehicleController', ['only' => ['index'], 'parameters' => ['vehicles' => 'vehicle_id']]);
 
-Route::resource('makers.vehicles', 'MakerVehicleController', ['except' => ['edit','create']]);
+Route::resource('makers.vehicles', 'MakerVehicleController', ['except' => ['edit','create'], 'parameters' => ['makers' => 'maker_id']]);
 
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
