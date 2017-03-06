@@ -10,9 +10,9 @@ class Vehicle extends Model
 
 	protected $primaryKey = 'serie';
 
-	protected $fillable = ['color', 'power', 'capacity', 'speed', 'maker_id'];
+	protected $fillable = ['color', 'power', 'capacity', 'speed'];
 
-	protected $hidden = ['serie', 'created_at', 'updated_at'];
+	protected $hidden = ['serie', 'created_at', 'updated_at', 'maker_id'];
 
 	public function maker()
 	{
