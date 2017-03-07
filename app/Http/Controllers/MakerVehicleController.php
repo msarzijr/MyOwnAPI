@@ -10,6 +10,11 @@ use App\Http\Requests\CreateVehicleRequest;
 
 class MakerVehicleController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth.basic', ['except' => ['index', 'show']]);
+	}
+
 	//| GET|HEAD  | api/makers/{maker}/vehicles           | makers.vehicles.index   | App\Http\Controllers\MakerVehicleController@index   | api        |
 	public function index($makerId)
 	{
@@ -93,9 +98,25 @@ class MakerVehicleController extends Controller
 	}
 
 	//| DELETE    | api/makers/{maker}/vehicles/{vehicle} | makers.vehicles.destroy | App\Http\Controllers\MakerVehicleController@destroy | api        |
-	public function destroy($id)
+	public function destroy($makerId, $vehicleId)
 	{
-		# code...
+		$maker = Maker::find($makerId);
+
+		if(!$maker)
+		{
+			return response()->json(['message' => 'This maker does not exist!', 'code' => 404], 404);
+		}
+
+		$vehicle = $maker->vehicles->find($vehicleId);
+
+		if(!$vehicle)
+		{
+			return response()->json(['message' => 'This vehicle for that maker does not exist!', 'code' => 404], 404);			
+		}
+
+		$vehicle->delete();
+
+		return response()->json(['message' => 'The vehicle has been deleted!', 'code' => 200], 200);
 	}
 
 }

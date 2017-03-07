@@ -8,6 +8,11 @@ use App\Vehicle;
 
 class VehicleController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth.basic', ['except' => ['index']]);
+	}
+
 	//| GET|HEAD  | api/vehicles                          | vehicles.index          | App\Http\Controllers\VehicleController@index        | api
 	public function index()
 	{

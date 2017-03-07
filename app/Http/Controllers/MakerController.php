@@ -8,6 +8,11 @@ use App\Http\Requests\CreateMakerRequest;
 
 class MakerController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth.basic', ['except' => ['index', 'show']]);
+	}
+	
 	//| GET|HEAD  | api/makers                            | makers.index            | App\Http\Controllers\MakerController@index          | api        |
 	public function index()
 	{
@@ -62,7 +67,23 @@ class MakerController extends Controller
 	//| DELETE    | api/makers/{maker}                    | makers.destroy          | App\Http\Controllers\MakerController@destroy        | api        |
 	public function destroy($makerId)
 	{
-		# code...
+		$maker = Maker::find($makerId);
+
+		if(!$maker)
+		{
+			return response()->json(['message' => 'This maker does not exist!', 'code' => 404], 404);			
+		}
+
+		$vehicle = $maker->vehicles;
+
+		if(sizeof($vehicle) > 0)
+		{
+			return response()->json(['message' => 'This maker has vehicles associeted! Delete his vehicles first!', 'code' => 422], 422);
+		}
+
+		$maker->delete();
+
+		return response()->json(['message' => 'The maker has been deleted!', 'code' => 200], 200);
 	}
 
 }
